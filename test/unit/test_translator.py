@@ -1,18 +1,14 @@
 import pytest
 from unittest.mock import patch
-from src.translator import translate_content, query_llm_robust
-
+from src.translator import translate, query_llm_robust
 
 def test_chinese():
-    is_english, translated_content = translate_content("这是一条中文消息")
+    is_english, translated_content = translate("这是一条中文消息")
     assert is_english == False
     assert translated_content == "This is a Chinese message"
 
-
-#mocking the LLM API response for a normal translation response
 @patch('src.translator.query_llm_robust')
 def test_llm_normal_response(mock_query_llm_robust):
-    #define the expected LLM response
     expected_response = (False, "Here is your first example.")
     mock_query_llm_robust.return_value = expected_response
 
@@ -20,17 +16,15 @@ def test_llm_normal_response(mock_query_llm_robust):
 
     assert result == expected_response
 
-
-#mocking the LLM API response for a gibberish input response
 @patch('src.translator.query_llm_robust')
 def test_llm_gibberish_response(mock_query_llm_robust):
-    #define the expected LLM response for gibberish input
     expected_response = (False, "Error: Invalid translation response.")
     mock_query_llm_robust.return_value = expected_response
 
-    result = query_llm_robust("sdflkjqwepoijqwe")  # Gibberish input
+    result = query_llm_robust("sdflkjqwepoijqwe")
 
     assert result == expected_response
+
 
     
 # from src.translator import translate_content
