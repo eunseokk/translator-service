@@ -5,7 +5,7 @@ import langdetect
 client = AzureOpenAI(
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
     api_version="2024-02-15-preview",
-    azure_endpoint="https://bluesleep-ai.openai.azure.com/"
+    azure_endpoint="team-bluesleep-db-g9gncbexhhhjd7em.canadacentral-01.azurewebsites.net"
 )
 
 def translate(content: str) -> tuple[bool, str]:
