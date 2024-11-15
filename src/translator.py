@@ -52,7 +52,9 @@
 #             else:
 #                 return "Error: Invalid classification response"
 #         else:
-
+#             return "Error: No choices returned from the model."
+#     except Exception as e:
+#         return f"Error in classification: {str(e)}"
 
 
 def translate_content(content: str) -> tuple[bool, str]:
@@ -89,6 +91,3 @@ def translate_content(content: str) -> tuple[bool, str]:
     if content == "This is an English message":
         return True, "This is an English message"
     return True, content
-#             return "Error: No choices returned from the model."
-#     except Exception as e:
-#         return f"Error in classification: {str(e)}"
