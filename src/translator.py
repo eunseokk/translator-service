@@ -2,12 +2,12 @@ import os
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 
-load_dotenv()
-client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-    api_version="2024-02-15-preview",
-    azure_endpoint="https://bluesleep-ai.openai.azure.com/"
-)
+# load_dotenv()
+# client = AzureOpenAI(
+#     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+#     api_version="2024-02-15-preview",
+#     azure_endpoint="https://bluesleep-ai.openai.azure.com/"
+# )
 
 # def get_translation(post: str) -> str:
 #     context = "Please translate the following text into English. Respond only with the translation and no extra information:"
