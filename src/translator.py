@@ -1,23 +1,25 @@
-from openai import AzureOpenAI
+import openai
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-    api_version="2024-02-15-preview",
-    azure_endpoint="https://bluesleep-ai.openai.azure.com/"
-)
+
+openai.api_key = os.getenv("AZURE_OPENAI_API_KEY")
+openai.api_base = "https://bluesleep-ai.openai.azure.com/"  # Your Azure endpoint
+openai.api_version = "2024-02-15-preview"  # Azure OpenAI API version
 
 def get_translation(post: str) -> str:
     context = "Please translate the following text into English. Respond only with the translation and no extra information:"
     prompt = f"{context}\n{post}"
-    
+
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
+        response = openai.ChatCompletion.create(
+            model="gpt-4o-mini",  # Ensure the model is available in your Azure OpenAI account
             messages=[{"role": "user", "content": prompt}]
         )
+        
+        # Log raw response for debugging
+        print(f"Raw Response: {response}")
 
         if response.choices:
             translation = response.choices[0].message.content.strip()
@@ -32,10 +34,13 @@ def get_language(post: str) -> str:
     prompt = f"{context}\n{post}"
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
+        response = openai.ChatCompletion.create(
+            model="gpt-4o-mini",  # Ensure the model is available in your Azure OpenAI account
             messages=[{"role": "user", "content": prompt}]
         )
+
+        # Log raw response for debugging
+        print(f"Raw Response: {response}")
 
         if response.choices:
             classification = response.choices[0].message.content.strip().lower()
