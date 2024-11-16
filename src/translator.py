@@ -1,3 +1,4 @@
+import json
 from openai import AzureOpenAI
 import os
 from dotenv import load_dotenv
@@ -64,12 +65,16 @@ def translate_content(post: str) -> tuple[bool, str]:
             ]
         )
 
-        translation = translation_response.choices[0].message.content.strip()
-        if not translation:
-            raise ValueError("Unexpected format for translation response.")
-
-        return False, translation
-
+        # Check if the response is in JSON format
+        try:
+            translation = translation_response.choices[0].message.content.strip()
+            if not translation:
+                raise ValueError("Unexpected format for translation response.")
+            return (False, translation)
+        except json.JSONDecodeError:
+            print("Received a non-JSON response.")
+            return (False, "Error: The response was not in a valid format.")
+        
     except Exception as e:
         print(f"Error: {e}")
-        return False, "An error occurred while processing your request. Please try again later."
+        return (False, "An error occurred while processing your request. Please try again later.")
