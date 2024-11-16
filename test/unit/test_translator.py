@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from src.translator import translate_content
 import os
 from openai import AzureOpenAI
+#some of this is from copilot
 # from src.translator import translate_content
 
 
@@ -61,6 +62,27 @@ def test_basic_english():
     is_english, translated_content = translate_content("This is an English sentence.")
     assert is_english == True
     assert translated_content.strip().lower() == "this is an english sentence"
+
+
+@patch('src.translator.client.chat.completions.create')
+def test_llm_normal_response(mocker):
+    """Test for handling a normal (valid) translation response from the LLM."""
+    mocker.return_value.choices = [MagicMock(message=MagicMock(content="Bonjour tout le monde"))]
+    
+    is_english, translated_content = translate_content("Bonjour tout le monde")
+    
+    assert is_english == False
+    assert translated_content.strip().lower() == "hello everyone"
+
+@patch('src.translator.client.chat.completions.create')
+def test_llm_gibberish_response(mocker):
+    """Test for handling gibberish or invalid text responses from the LLM."""
+    mocker.return_value.choices = [MagicMock(message=MagicMock(content="Not Translatable"))]
+    
+    is_english, translated_content = translate_content("asdkjasld1239adk")
+    
+    assert is_english == False
+    assert translated_content == "Not Translatable"
 
 
 @patch('src.translator.client.chat.completions.create')
